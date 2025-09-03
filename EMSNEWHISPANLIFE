@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario de Cirugía - Rol Médico</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f4f6f9;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    form {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: bold;
+      color: #34495e;
+    }
+    textarea, input[type="text"], input[type="email"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      resize: vertical;
+    }
+    button {
+      display: block;
+      margin: 20px auto;
+      background: #3498db;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+    .respuestas {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #ecf0f1;
+      padding: 20px;
+      border-radius: 10px;
+      display: none; /* Oculto por defecto */
+    }
+    .respuesta {
+      background: white;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>Formulario de Cirugía - Rol Médico</h1>
+
+  <!-- Enlace ficticio de acceso -->
+  <p style="text-align:center;">
+    Accede a este formulario en: 
+    <a href="https://tuservidor.com/formulario" target="_blank">https://tuservidor.com/formulario</a>
+  </p>
+
+  <!-- Formulario -->
+  <form id="formulario">
+    <label>Nombre y Rango:</label>
+    <input type="text" id="nombre" name="nombre" required>
+
+    <label>1. ¿Cuál es la diferencia entre un procedimiento de urgencia y una cirugía programada?</label>
+    <textarea rows="3" name="p1"></textarea>
+
+    <label>2. ¿Qué significa “esterilizar” y por qué es importante en una operación?</label>
+    <textarea rows="3" name="p2"></textarea>
+
+    <label>3. ¿Qué órganos vitales están en la cavidad abdominal? (menciona al menos 3)</label>
+    <textarea rows="3" name="p3"></textarea>
+
+    <label>4. ¿Qué es una anestesia general y cómo la representarías en rol?</label>
+    <textarea rows="3" name="p4"></textarea>
+
+    <label>5. Describe los pasos básicos antes de iniciar una cirugía (mínimo 3).</label>
+    <textarea rows="3" name="p5"></textarea>
+
+    <label>6. ¿Qué material quirúrgico usarías (en rol) para cerrar una herida profunda por arma blanca?</label>
+    <textarea rows="3" name="p6"></textarea>
+
+    <label>7. Un paciente tiene hemorragia interna tras un accidente. ¿Qué pasos seguirías para estabilizarlo en el quirófano?</label>
+    <textarea rows="3" name="p7"></textarea>
+
+    <label>8. ¿Qué diferencia hay entre suturar y grapar una herida?</label>
+    <textarea rows="3" name="p8"></textarea>
+
+    <label>9. Te traen a un paciente con una herida de bala en el tórax. Explica cómo rolearías la cirugía paso a paso.</label>
+    <textarea rows="3" name="p9"></textarea>
+
+    <label>10. Durante una cirugía, el paciente entra en paro cardíaco. ¿Qué acciones harías en rol para intentar salvarlo?</label>
+    <textarea rows="3" name="p10"></textarea>
+
+    <label>11. Estás en medio de una cirugía y otro médico te pide ayuda en otra sala. ¿Qué decisión tomarías y cómo lo rolearías?</label>
+    <textarea rows="3" name="p11"></textarea>
+
+    <label>12. Si alguien te dice: “Oye, opérame rápido que tengo que irme” en mitad de rol, ¿cómo actuarías sin romper el rol?</label>
+    <textarea rows="3" name="p12"></textarea>
+
+    <button type="submit">Enviar Respuestas</button>
+  </form>
+
+  <!-- Apartado protegido -->
+  <div class="respuestas" id="respuestas">
+    <h2>Respuestas Almacenadas</h2>
+  </div>
+
+  <!-- Login para ver respuestas -->
+  <div style="max-width:800px; margin:40px auto; background:white; padding:20px; border-radius:10px; box-shadow:0 4px 6px rgba(0,0,0,0.1);">
+    <h2>Acceso a Respuestas</h2>
+    <label>Introduce tu correo electrónico autorizado:</label>
+    <input type="email" id="correo" placeholder="ejemplo@correo.com">
+    <button onclick="accederRespuestas()">Acceder</button>
+    <p id="mensaje" style="color:red; font-weight:bold;"></p>
+  </div>
+
+  <script>
+    const formulario = document.getElementById('formulario');
+    const respuestasDiv = document.getElementById('respuestas');
+    const mensaje = document.getElementById('mensaje');
+
+    // Lista de correos autorizados
+    const correosAutorizados = ["doctor1@hospital.com", "jefe@hospital.com"];
+
+    formulario.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const nombre = document.getElementById('nombre').value;
+      const datos = new FormData(formulario);
+
+      let textoArchivo = `Nombre y Rango: ${nombre}\\n\\n`;
+      let respuestasHTML = `<div class='respuesta'><strong>Nombre y Rango:</strong> ${nombre}<br><br>`;
+
+      datos.forEach((valor, clave) => {
+        if(clave !== 'nombre'){
+          textoArchivo += `${clave}: ${valor}\\n\\n`;
+          respuestasHTML += `<strong>${clave.toUpperCase()}:</strong> ${valor}<br><br>`;
+        }
+      });
+
+      respuestasHTML += '</div>';
+      respuestasDiv.innerHTML += respuestasHTML;
+
+      // Crear archivo de texto descargable
+      const blob = new Blob([textoArchivo], { type: 'text/plain' });
+      const enlace = document.createElement('a');
+      enlace.href = URL.createObjectURL(blob);
+      enlace.download = `${nombre.replace(/\\s+/g, '_')}_respuestas.txt`;
+      enlace.click();
+
+      formulario.reset();
+    });
+
+    function accederRespuestas() {
+      const correoIngresado = document.getElementById('correo').value;
+      if (correosAutorizados.includes(correoIngresado)) {
+        respuestasDiv.style.display = 'block';
+        mensaje.textContent = '';
+      } else {
+        respuestasDiv.style.display = 'none';
+        mensaje.textContent = 'Acceso denegado. Correo no autorizado.';
+      }
+    }
+  </script>
+</body>
+</html>
